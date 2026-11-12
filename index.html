@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Raccolta Corato · Liquid Glass</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Raccolta Corato">
+  <meta name="theme-color" content="#0B0F17">
+  
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    :root {
+      --bg: #0B0F17;
+      --card-bg: rgba(22, 32, 46, 0.75);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --inner-bg: rgba(255, 255, 255, 0.05);
+      --inner-border: rgba(255, 255, 255, 0.08);
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --accent: #10B981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      overflow-x: hidden;
+      padding-top: calc(env(safe-area-inset-top, 20px) + 12px);
+      padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 24px);
+      padding-left: 16px;
+      padding-right: 16px;
+      transition: background-color 0.4s ease;
+    }
+
+    /* Ambient Liquid Orbs */
+    .ambient-glow-top {
+      position: fixed;
+      top: -60px;
+      right: -60px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.22;
+      filter: blur(75px);
+      pointer-events: none;
+      z-index: 0;
+      transition: background 0.5s ease;
+    }
+
+    .ambient-glow-bottom {
+      position: fixed;
+      bottom: -60px;
+      left: -60px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: #0284C7;
+      opacity: 0.15;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app-container {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Glass Cards */
+    .glass-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-radius: 24px;
+      padding: 16px;
+      box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 10px 24px -6px rgba(0, 0, 0, 0.35);
+      transition: all 0.3s ease;
+    }
+
+    /* 1. Header */
+    .header-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .eco-orb {
+      width: 42px;
+      height: 42px;
+      border-radius: 21px;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1.5px solid #10B981;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #34D399;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .glass-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+
+    .glass-btn:active {
+      transform: scale(0.95);
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    /* 2. Stasera Esposizione Banner */
+    .tonight-banner {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(16, 185, 129, 0.12));
+      border: 1.2px solid rgba(56, 189, 248, 0.4);
+      padding: 12px 16px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tonight-badge {
+      font-size: 10px;
+      font-weight: 800;
+      color: #38BDF8;
+      background: rgba(2, 132, 199, 0.25);
+      padding: 2px 8px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .tonight-text {
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    /* 3. Weekly 7-Day Pills */
+    .week-pills-bar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      padding: 8px;
+      border-radius: 22px;
+    }
+
+    .day-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 8px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .day-pill:active {
+      transform: scale(0.93);
+    }
+
+    .day-pill.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 4px 14px -2px var(--accent);
+    }
+
+    .day-pill-short {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: var(--text-muted);
+    }
+
+    .day-pill.active .day-pill-short {
+      color: #FFFFFF;
+    }
+
+    .day-pill-emoji {
+      font-size: 17px;
+    }
+
+    .day-pill-num {
+      font-size: 12px;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+
+    .today-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 2px;
+      background: #10B981;
+    }
+
+    .day-pill.active .today-dot {
+      background: #FFFFFF;
+    }
+
+    /* 4. Hero Card */
+    .hero-card {
+      border: 1.8px solid var(--accent);
+      box-shadow: 0 8px 30px -8px var(--accent);
+    }
+
+    .hero-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .hero-date-badge {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-box-badge {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--inner-bg);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--inner-border);
+    }
+
+    .hero-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .hero-orb {
+      width: 88px;
+      height: 88px;
+      border-radius: 44px;
+      background: radial-gradient(circle, var(--accent) 0%, rgba(255,255,255,0.05) 75%);
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      box-shadow: 0 4px 20px -2px var(--accent);
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .hero-orb::after {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border-radius: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: -0.4px;
+      margin-bottom: 4px;
+    }
+
+    .hero-timing {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: var(--inner-bg);
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--inner-border);
+      margin-bottom: 14px;
+    }
+
+    /* Panels Inside Hero */
+    .info-panels {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .info-panel {
+      background: var(--inner-bg);
+      border: 1px solid var(--inner-border);
+      border-radius: 16px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      line-height: 1.45;
+    }
+
+    .panel-label-green {
+      color: #10B981;
+      font-weight: 800;
+      font-size: 10.5px;
+      margin-bottom: 2px;
+    }
+
+    .panel-label-red {
+      color: #F43F5E;
+      font-weight: 800;
+      font-size: 10.5px;
+      margin-bottom: 2px;
+    }
+
+    .panel-label-accent {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 10.5px;
+      margin-bottom: 2px;
+    }
+
+    .tip-panel {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    /* 5. Friday Focus */
+    .friday-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .friday-title {
+      font-size: 12.5px;
+      font-weight: 800;
+    }
+
+    .friday-subtitle {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #0284C7;
+    }
+
+    .friday-chips {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .friday-chip {
+      background: var(--inner-bg);
+      border: 1px solid var(--inner-border);
+      border-radius: 12px;
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 10.5px;
+    }
+
+    .friday-chip.active-vetro {
+      background: rgba(13, 148, 136, 0.25);
+      border-color: #0D9488;
+    }
+
+    .friday-chip.active-carta {
+      background: rgba(2, 132, 199, 0.25);
+      border-color: #0284C7;
+    }
+
+    /* 6. Quick Action Buttons */
+    .actions-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .primary-btn {
+      flex: 1;
+      background: linear-gradient(135deg, #10B981, #059669);
+      border: none;
+      color: #FFFFFF;
+      font-size: 13.5px;
+      font-weight: 800;
+      padding: 14px;
+      border-radius: 18px;
+      box-shadow: 0 4px 16px -2px rgba(16, 185, 129, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .primary-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Install Sheet / Helper */
+    .install-hint {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 4px 0 12px;
+      line-height: 1.4;
+    }
+
+    .install-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fluid Ambient Orbs -->
+  <div class="ambient-glow-top" id="ambientTop"></div>
+  <div class="ambient-glow-bottom"></div>
+
+  <div class="app-container">
+
+    <!-- 1. Header Card -->
+    <div class="glass-card header-card">
+      <div class="header-left">
+        <div class="eco-orb">♻️</div>
+        <div>
+          <h1 class="header-title">Raccolta Corato</h1>
+          <div class="header-badge">
+            <span>●</span> Centro Abitato · SANB
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="glass-btn" onclick="toggleTheme()" id="themeBtn">
+          <span id="themeEmoji">☀️</span>
+        </button>
+        <button class="glass-btn" onclick="testNotif()">
+          🔔
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Tonight Exposition Banner -->
+    <div class="tonight-banner" onclick="selectTomorrow()">
+      <div>
+        <span class="tonight-badge">🌙 STASERA (21:00 - 24:00)</span>
+        <div class="tonight-text" id="tonightDesc">
+          Domani ritirano: <span id="tonightMat" style="color: #38BDF8; font-weight:800;">📦 Carta e cartoncino</span>
+        </div>
+      </div>
+      <span style="font-size: 16px; color: #38BDF8; font-weight: 800;">›</span>
+    </div>
+
+    <!-- 3. Weekly 7-Day Navigation Bar -->
+    <div class="glass-card week-pills-bar" id="weekPills">
+      <!-- Injected via JS -->
+    </div>
+
+    <!-- 4. Hero Showcase Glass Card -->
+    <div class="glass-card hero-card" id="heroCard">
+      <div class="hero-top-row">
+        <span class="hero-date-badge" id="heroBadgeDate">✨ OGGI · GIOVEDÌ 12 NOV</span>
+        <span class="hero-box-badge" id="heroBadgeBox">🔘 Mastello Grigio (TAG)</span>
+      </div>
+
+      <div class="hero-center">
+        <div class="hero-orb" id="heroOrb">
+          <span id="heroEmoji">🗑️</span>
+        </div>
+        <h2 class="hero-title" id="heroTitle">Secco residuo</h2>
+        <div class="hero-timing">⏰ Ritiro al mattino · Esposizione 21:00 - 24:00</div>
+      </div>
+
+      <div class="info-panels">
+        <div class="info-panel">
+          <div class="panel-label-green">✓ COSA CONFERIRE:</div>
+          <div id="heroCosaSi" style="color: rgba(255,255,255,0.85);">
+            • Scontrini in carta termica, spazzolini, penne<br>
+            • Pannolini, assorbenti, lettiere animali, polvere
+          </div>
+        </div>
+
+        <div class="info-panel">
+          <div class="panel-label-red">✕ DA NON CONFERIRE:</div>
+          <div id="heroCosaNo" style="color: rgba(255,255,255,0.85);">
+            • Materiali riciclabili (umido, carta, plastica, vetro)<br>
+            • Pile, farmaci, rifiuti speciali e RAEE
+          </div>
+        </div>
+
+        <div class="info-panel tip-panel" id="heroTipPanel">
+          <div class="panel-label-accent" id="heroTipTitle">💡 NOTA SANB CORATO:</div>
+          <div id="heroTip" style="color: #FFFFFF;">
+            Utilizza esclusivamente il mastello grigio dotato di microchip RFID associato alla tua utenza TARI.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Friday Focus Corato Widget -->
+    <div class="glass-card">
+      <div class="friday-title-row">
+        <span class="friday-title">📅 Focus Venerdì del Mese</span>
+        <span class="friday-subtitle">1° Ven: Vetro · Altri: Carta</span>
+      </div>
+      <div class="friday-chips" id="fridayChips">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+    <!-- 6. Quick Action Buttons -->
+    <div class="actions-row">
+      <button class="primary-btn" onclick="selectToday()">
+        📅 Torna a Oggi
+      </button>
+      <button class="glass-btn" style="padding: 0 16px; font-size: 16px;" onclick="testNotif()">
+        🔔
+      </button>
+    </div>
+
+    <!-- Install on iPhone helper hint -->
+    <div class="install-hint">
+      Tocca <b style="color: #38BDF8;">Condividi ⎋</b> in Safari su iPhone e seleziona:<br>
+      <span class="install-badge">➕ Aggiungi a schermata Home</span>
+    </div>
+
+  </div>
+
+  <script>
+    const DAYS = [
+      {
+        short: "LUN", name: "Lunedì", date: "9", emoji: "🌱", mat: "Umido",
+        accent: "#10B981", box: "🟤 Mastello Marrone", isToday: false,
+        cosaSi: "• Avanzi di cibo crudi e cotti, bucce e torsoli<br>• Fondi di caffè, filtri di tè, tovaglioli di carta unti",
+        cosaNo: "• Buste di plastica tradizionale non compostabili<br>• Pannolini, assorbenti, mozziconi di sigaretta",
+        tip: "Usa solo sacchetti compostabili certificati UNI EN 13432 chiusi nel mastello marrone."
+      },
+      {
+        short: "MAR", name: "Martedì", date: "10", emoji: "🧴", mat: "Plastica + Lattine",
+        accent: "#F59E0B", box: "🟡 Busta / Mastello Giallo", isToday: false,
+        cosaSi: "• Bottiglie d'acqua e bibite, flaconi detersivo/shampoo<br>• Lattine in alluminio, vaschette alimentari e barattoli",
+        cosaNo: "• Giocattoli in plastica dura, bacinelle, gomma<br>• Posate monouso sporche e custodie CD/DVD",
+        tip: "Svuota e schiaccia le bottiglie in senso orizzontale per ridurre al minimo il volume."
+      },
+      {
+        short: "MER", name: "Mercoledì", date: "11", emoji: "🌱", mat: "Umido",
+        accent: "#10B981", box: "🟤 Mastello Marrone", isToday: false,
+        cosaSi: "• Scarti di cibo, bucce, tovaglioli unti, gusci d'uovo<br>• Fondi di caffè e piccoli scarti organici",
+        cosaNo: "• Buste di plastica tradizionale, lettiere non biodegradabili",
+        tip: "L'umido viene ritirato 3 volte a settimana a Corato (Lunedì, Mercoledì, Sabato)."
+      },
+      {
+        short: "GIO", name: "Giovedì", date: "12", emoji: "🗑️", mat: "Secco residuo",
+        accent: "#94A3B8", box: "🔘 Mastello Grigio (TAG)", isToday: true,
+        cosaSi: "• Scontrini in carta termica, spazzolini, penne<br>• Pannolini, assorbenti, lettiere animali, polvere",
+        cosaNo: "• Materiali riciclabili (umido, carta, plastica, vetro)<br>• Pile, farmaci scaduti, rifiuti speciali e RAEE",
+        tip: "Utilizza esclusivamente il mastello grigio dotato di microchip RFID associato alla tua utenza."
+      },
+      {
+        short: "VEN", name: "Venerdì", date: "13", emoji: "📦", mat: "Carta e cartoncino",
+        accent: "#0284C7", box: "🔵 Mastello / Busta Blu", isToday: false,
+        cosaSi: "• Scatole in cartone piegate, giornali, riviste, libri<br>• Cartoni per bevande e latte (Tetra Pak ben sciacquati)",
+        cosaNo: "• Carta forno, carta oleata, cartoni pizza con cibo<br>• Scontrini fiscali (vanno nel secco residuo!)",
+        tip: "A Corato solo il 1° venerdì del mese è Vetro. Oggi è il 2° venerdì, quindi Carta e cartoncino!"
+      },
+      {
+        short: "SAB", name: "Sabato", date: "14", emoji: "🌱", mat: "Umido",
+        accent: "#10B981", box: "🟤 Mastello Marrone", isToday: false,
+        cosaSi: "• Avanzi alimentari, bucce, fondi di caffè e filtri di tè<br>• Scarti organici del fine settimana",
+        cosaNo: "• Buste di plastica tradizionale, mozziconi",
+        tip: "Ultimo ritiro della settimana prima della pausa domenicale."
+      },
+      {
+        short: "DOM", name: "Domenica", date: "15", emoji: "❌", mat: "Nessuna raccolta",
+        accent: "#F43F5E", box: "🚫 Nessun mastello", isToday: false,
+        cosaSi: "• Nessun conferimento previsto la domenica.<br>• Goditi la giornata di riposo!",
+        cosaNo: "• Non abbandonare rifiuti o mastelli sul suolo pubblico.",
+        tip: "Domenica sera ricordati di esporre l'Umido per il ritiro di lunedì mattina!"
+      }
+    ];
+
+    let currentDayIdx = 3;
+    let isDark = true;
+
+    function renderWeek() {
+      const container = document.getElementById("weekPills");
+      container.innerHTML = "";
+      DAYS.forEach((d, idx) => {
+        const isSel = (idx === currentDayIdx);
+        const pill = document.createElement("div");
+        pill.className = `day-pill ${isSel ? 'active' : ''}`;
+        if (isSel) {
+          pill.style.background = d.accent;
+          pill.style.borderColor = d.accent;
+          pill.style.boxShadow = `0 4px 14px -2px ${d.accent}`;
+        }
+        pill.innerHTML = `
+          <span class="day-pill-short">${d.short}</span>
+          <span class="day-pill-emoji">${d.emoji}</span>
+          <span class="day-pill-num">${d.date}</span>
+          ${d.isToday ? '<span class="today-dot"></span>' : '<span style="height:4px;"></span>'}
+        `;
+        pill.onclick = () => selectDay(idx);
+        container.appendChild(pill);
+      });
+    }
+
+    function renderFridays() {
+      const container = document.getElementById("fridayChips");
+      const fridays = [
+        { num: 1, day: "06", mat: "🍾 VETRO", isVetro: true },
+        { num: 2, day: "13", mat: "📦 CARTA", isVetro: false },
+        { num: 3, day: "20", mat: "📦 Carta", isVetro: false },
+        { num: 4, day: "27", mat: "📦 Carta", isVetro: false }
+      ];
+
+      container.innerHTML = "";
+      fridays.forEach((f) => {
+        const chip = document.createElement("div");
+        const isSel = (currentDayIdx === 4 && f.num === 2);
+        chip.className = `friday-chip ${f.isVetro ? 'active-vetro' : (isSel ? 'active-carta' : '')}`;
+        chip.innerHTML = `
+          <div style="font-weight:700; color: ${f.isVetro ? '#0D9488' : '#0284C7'}; font-size: 10px;">${f.num}° Ven · ${f.day}</div>
+          <div style="font-weight:800; margin-top: 2px;">${f.mat}</div>
+        `;
+        container.appendChild(chip);
+      });
+    }
+
+    function selectDay(idx) {
+      if (navigator.vibrate) navigator.vibrate(10);
+      currentDayIdx = idx;
+      const d = DAYS[idx];
+      document.documentElement.style.setProperty('--accent', d.accent);
+
+      document.getElementById("heroBadgeDate").textContent = d.isToday
+        ? `✨ OGGI · ${d.name.toUpperCase()} ${d.date} NOV`
+        : `✨ ${d.name.toUpperCase()} ${d.date} NOV`;
+      document.getElementById("heroBadgeBox").textContent = d.box;
+      document.getElementById("heroEmoji").textContent = d.emoji;
+      document.getElementById("heroTitle").textContent = d.mat;
+      document.getElementById("heroCosaSi").innerHTML = d.cosaSi;
+      document.getElementById("heroCosaNo").innerHTML = d.cosaNo;
+      document.getElementById("heroTip").textContent = d.tip;
+
+      const heroOrb = document.getElementById("heroOrb");
+      heroOrb.style.background = `radial-gradient(circle, ${d.accent} 0%, rgba(255,255,255,0.05) 75%)`;
+      heroOrb.style.borderColor = d.accent;
+
+      const heroCard = document.getElementById("heroCard");
+      heroCard.style.borderColor = d.accent;
+      heroCard.style.boxShadow = `0 8px 30px -8px ${d.accent}`;
+
+      renderWeek();
+      renderFridays();
+    }
+
+    function selectToday() {
+      selectDay(3);
+    }
+
+    function selectTomorrow() {
+      selectDay((currentDayIdx + 1) % 7);
+    }
+
+    function toggleTheme() {
+      isDark = !isDark;
+      const body = document.body;
+      const themeEmoji = document.getElementById("themeEmoji");
+
+      if (!isDark) {
+        document.documentElement.style.setProperty('--bg', '#EFF5F2');
+        document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.88)');
+        document.documentElement.style.setProperty('--card-border', 'rgba(255, 255, 255, 0.9)');
+        document.documentElement.style.setProperty('--inner-bg', 'rgba(244, 248, 246, 0.9)');
+        document.documentElement.style.setProperty('--inner-border', 'rgba(215, 228, 222, 0.8)');
+        document.documentElement.style.setProperty('--text', '#0F172A');
+        document.documentElement.style.setProperty('--text-muted', '#64748B');
+        themeEmoji.textContent = '🌙';
+      } else {
+        document.documentElement.style.setProperty('--bg', '#0B0F17');
+        document.documentElement.style.setProperty('--card-bg', 'rgba(22, 32, 46, 0.75)');
+        document.documentElement.style.setProperty('--card-border', 'rgba(255, 255, 255, 0.12)');
+        document.documentElement.style.setProperty('--inner-bg', 'rgba(255, 255, 255, 0.05)');
+        document.documentElement.style.setProperty('--inner-border', 'rgba(255, 255, 255, 0.08)');
+        document.documentElement.style.setProperty('--text', '#F8FAFC');
+        document.documentElement.style.setProperty('--text-muted', '#94A3B8');
+        themeEmoji.textContent = '☀️';
+      }
+      selectDay(currentDayIdx);
+    }
+
+    function testNotif() {
+      if (navigator.vibrate) navigator.vibrate([20, 50, 20]);
+      const tomorrow = DAYS[(currentDayIdx + 1) % 7];
+      alert(`🔔 Raccolta Corato:\nStasera tra le 21:00 e le 24:00 prepara ed esponi: ${tomorrow.emoji} ${tomorrow.mat} per domani ${tomorrow.name}!`);
+    }
+
+    // Register Service Worker for offline iOS use
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+
+    // Init
+    selectDay(3);
+  </script>
+</body>
+</html>
