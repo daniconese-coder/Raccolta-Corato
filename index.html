@@ -7,21 +7,74 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Raccolta Corato">
-  <meta name="theme-color" content="#0B0F17">
+  <meta name="theme-color" content="#0B0F17" id="metaThemeColor">
   
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
 
   <style>
+    /* Dark Theme (Default: Liquid Obsidian) */
     :root {
       --bg: #0B0F17;
-      --card-bg: rgba(22, 32, 46, 0.75);
+      --card-bg: rgba(22, 32, 46, 0.78);
       --card-border: rgba(255, 255, 255, 0.12);
+      --card-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.45);
+      
       --inner-bg: rgba(255, 255, 255, 0.05);
       --inner-border: rgba(255, 255, 255, 0.08);
-      --text: #F8FAFC;
-      --text-muted: #94A3B8;
+      
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      
+      --pill-bg: rgba(255, 255, 255, 0.05);
+      --pill-border: rgba(255, 255, 255, 0.09);
+      --pill-num: #F8FAFC;
+      --pill-short: #94A3B8;
+      
+      --desc-text: #E2E8F0;
+      --tip-bg: rgba(16, 185, 129, 0.12);
+      --tip-border: rgba(16, 185, 129, 0.35);
+      --tip-text: #F8FAFC;
+      
+      --banner-bg: linear-gradient(135deg, rgba(2, 132, 199, 0.16), rgba(16, 185, 129, 0.12));
+      --banner-border: rgba(56, 189, 248, 0.45);
+      --banner-text: #FFFFFF;
+      --banner-mat: #38BDF8;
+      --banner-badge-bg: rgba(2, 132, 199, 0.28);
+      
       --accent: #10B981;
+    }
+
+    /* Light Theme (Frosted Pearl Glass - High Contrast) */
+    html.light-mode {
+      --bg: #EEF4F1;
+      --card-bg: rgba(255, 255, 255, 0.94);
+      --card-border: #D1DDD6;
+      --card-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
+      
+      --inner-bg: #F3F7F5;
+      --inner-border: #CBD8D0;
+      
+      --text-primary: #0F172A; /* Nero Slate profondo - massima leggibilità */
+      --text-secondary: #334155;
+      --text-muted: #475569;
+      
+      --pill-bg: #F1F6F3;
+      --pill-border: #C5D6CC;
+      --pill-num: #0F172A; /* Numeri data neri e ben visibili */
+      --pill-short: #334155; /* Nomi giorni scuri */
+      
+      --desc-text: #1E293B; /* Testo liste scuro e nitido */
+      --tip-bg: #ECFDF5;
+      --tip-border: #6EE7B7;
+      --tip-text: #064E3B; /* Testo consiglio scuro */
+      
+      --banner-bg: linear-gradient(135deg, #E0F2FE, #ECFDF5);
+      --banner-border: #7DD3FC;
+      --banner-text: #0F172A;
+      --banner-mat: #0284C7;
+      --banner-badge-bg: #BAE6FD;
     }
 
     * {
@@ -35,7 +88,7 @@
 
     body {
       background-color: var(--bg);
-      color: var(--text);
+      color: var(--text-primary);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
       min-height: 100vh;
       min-height: -webkit-fill-available;
@@ -44,7 +97,7 @@
       padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 24px);
       padding-left: 16px;
       padding-right: 16px;
-      transition: background-color 0.4s ease;
+      transition: background-color 0.35s ease, color 0.35s ease;
     }
 
     /* Ambient Liquid Orbs */
@@ -90,12 +143,12 @@
     /* Glass Cards */
     .glass-card {
       background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      border: 1.2px solid var(--card-border);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border-radius: 24px;
       padding: 16px;
-      box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 10px 24px -6px rgba(0, 0, 0, 0.35);
+      box-shadow: var(--card-shadow);
       transition: all 0.3s ease;
     }
 
@@ -117,7 +170,7 @@
       width: 42px;
       height: 42px;
       border-radius: 21px;
-      background: rgba(16, 185, 129, 0.2);
+      background: rgba(16, 185, 129, 0.18);
       border: 1.5px solid #10B981;
       display: flex;
       align-items: center;
@@ -129,20 +182,27 @@
       font-size: 18px;
       font-weight: 800;
       letter-spacing: -0.3px;
+      color: var(--text-primary);
     }
 
     .header-badge {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 700;
-      color: #34D399;
+      color: #059669;
       background: rgba(16, 185, 129, 0.15);
       border: 1px solid rgba(16, 185, 129, 0.4);
       padding: 2px 8px;
       border-radius: 999px;
       margin-top: 2px;
+    }
+
+    html.light-mode .header-badge {
+      color: #047857;
+      background: #D1FAE5;
+      border-color: #6EE7B7;
     }
 
     .header-actions {
@@ -151,9 +211,9 @@
     }
 
     .glass-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: var(--text);
+      background: var(--inner-bg);
+      border: 1.2px solid var(--inner-border);
+      color: var(--text-primary);
       font-size: 12px;
       font-weight: 700;
       padding: 8px 12px;
@@ -167,26 +227,27 @@
 
     .glass-btn:active {
       transform: scale(0.95);
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.2);
     }
 
     /* 2. Stasera Esposizione Banner */
     .tonight-banner {
-      background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(16, 185, 129, 0.12));
-      border: 1.2px solid rgba(56, 189, 248, 0.4);
+      background: var(--banner-bg);
+      border: 1.5px solid var(--banner-border);
       padding: 12px 16px;
       border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
+      box-shadow: 0 4px 14px -3px rgba(2, 132, 199, 0.2);
     }
 
     .tonight-badge {
       font-size: 10px;
       font-weight: 800;
-      color: #38BDF8;
-      background: rgba(2, 132, 199, 0.25);
+      color: var(--banner-mat);
+      background: var(--banner-badge-bg);
       padding: 2px 8px;
       border-radius: 999px;
       display: inline-block;
@@ -197,6 +258,8 @@
     .tonight-text {
       font-size: 12.5px;
       font-weight: 600;
+      color: var(--banner-text);
+      line-height: 1.4;
     }
 
     /* 3. Weekly 7-Day Pills */
@@ -209,8 +272,8 @@
     }
 
     .day-pill {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--pill-bg);
+      border: 1.2px solid var(--pill-border);
       border-radius: 16px;
       padding: 8px 2px;
       display: flex;
@@ -218,7 +281,7 @@
       align-items: center;
       gap: 4px;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.22s ease;
     }
 
     .day-pill:active {
@@ -226,45 +289,50 @@
     }
 
     .day-pill.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      box-shadow: 0 4px 14px -2px var(--accent);
+      background: var(--accent) !important;
+      border-color: var(--accent) !important;
+      box-shadow: 0 4px 16px -2px var(--accent);
     }
 
     .day-pill-short {
       font-size: 9.5px;
       font-weight: 800;
-      color: var(--text-muted);
+      color: var(--pill-short);
+      letter-spacing: 0.3px;
     }
 
     .day-pill.active .day-pill-short {
-      color: #FFFFFF;
+      color: #FFFFFF !important;
     }
 
     .day-pill-emoji {
-      font-size: 17px;
+      font-size: 18px;
     }
 
     .day-pill-num {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 800;
-      color: #FFFFFF;
+      color: var(--pill-num);
+    }
+
+    .day-pill.active .day-pill-num {
+      color: #FFFFFF !important;
     }
 
     .today-dot {
-      width: 4px;
-      height: 4px;
-      border-radius: 2px;
+      width: 5px;
+      height: 5px;
+      border-radius: 2.5px;
       background: #10B981;
     }
 
     .day-pill.active .today-dot {
-      background: #FFFFFF;
+      background: #FFFFFF !important;
     }
 
     /* 4. Hero Card */
     .hero-card {
-      border: 1.8px solid var(--accent);
+      border: 2px solid var(--accent);
       box-shadow: 0 8px 30px -8px var(--accent);
     }
 
@@ -279,16 +347,17 @@
       font-size: 11px;
       font-weight: 800;
       color: var(--accent);
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--inner-bg);
       padding: 4px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1.2px solid var(--accent);
+      letter-spacing: 0.2px;
     }
 
     .hero-box-badge {
-      font-size: 10.5px;
-      font-weight: 600;
-      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
       background: var(--inner-bg);
       padding: 4px 10px;
       border-radius: 999px;
@@ -300,20 +369,20 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      padding: 8px 0;
+      padding: 6px 0;
     }
 
     .hero-orb {
-      width: 88px;
-      height: 88px;
-      border-radius: 44px;
-      background: radial-gradient(circle, var(--accent) 0%, rgba(255,255,255,0.05) 75%);
-      border: 2px solid var(--accent);
+      width: 90px;
+      height: 90px;
+      border-radius: 45px;
+      background: radial-gradient(circle, var(--accent) 0%, rgba(255,255,255,0.08) 75%);
+      border: 2.5px solid var(--accent);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 42px;
-      box-shadow: 0 4px 20px -2px var(--accent);
+      font-size: 44px;
+      box-shadow: 0 4px 22px -2px var(--accent);
       position: relative;
       margin-bottom: 8px;
     }
@@ -322,24 +391,25 @@
       content: "";
       position: absolute;
       inset: 2px;
-      border-radius: 42px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 43px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
       pointer-events: none;
     }
 
     .hero-title {
-      font-size: 25px;
+      font-size: 26px;
       font-weight: 900;
       letter-spacing: -0.4px;
       margin-bottom: 4px;
+      color: var(--text-primary);
     }
 
     .hero-timing {
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 700;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       background: var(--inner-bg);
-      padding: 3px 10px;
+      padding: 4px 12px;
       border-radius: 999px;
       border: 1px solid var(--inner-border);
       margin-bottom: 14px;
@@ -357,35 +427,52 @@
       background: var(--inner-bg);
       border: 1px solid var(--inner-border);
       border-radius: 16px;
-      padding: 10px 12px;
-      font-size: 11.5px;
-      line-height: 1.45;
+      padding: 11px 13px;
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     .panel-label-green {
-      color: #10B981;
+      color: #059669;
       font-weight: 800;
-      font-size: 10.5px;
-      margin-bottom: 2px;
+      font-size: 11px;
+      margin-bottom: 3px;
+      letter-spacing: 0.3px;
+    }
+
+    html.light-mode .panel-label-green {
+      color: #047857;
     }
 
     .panel-label-red {
-      color: #F43F5E;
+      color: #E11D48;
       font-weight: 800;
-      font-size: 10.5px;
-      margin-bottom: 2px;
+      font-size: 11px;
+      margin-bottom: 3px;
+      letter-spacing: 0.3px;
     }
 
     .panel-label-accent {
       color: var(--accent);
       font-weight: 800;
-      font-size: 10.5px;
-      margin-bottom: 2px;
+      font-size: 11px;
+      margin-bottom: 3px;
+      letter-spacing: 0.3px;
     }
 
     .tip-panel {
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(16, 185, 129, 0.35);
+      background: var(--tip-bg);
+      border: 1.2px solid var(--tip-border);
+    }
+
+    .panel-desc {
+      color: var(--desc-text);
+      font-weight: 500;
+    }
+
+    .panel-tip-desc {
+      color: var(--tip-text);
+      font-weight: 600;
     }
 
     /* 5. Friday Focus */
@@ -397,14 +484,15 @@
     }
 
     .friday-title {
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 800;
+      color: var(--text-primary);
     }
 
     .friday-subtitle {
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 700;
-      color: #0284C7;
+      color: var(--banner-mat);
     }
 
     .friday-chips {
@@ -415,21 +503,43 @@
 
     .friday-chip {
       background: var(--inner-bg);
-      border: 1px solid var(--inner-border);
-      border-radius: 12px;
+      border: 1.2px solid var(--inner-border);
+      border-radius: 14px;
       padding: 8px 4px;
       text-align: center;
       font-size: 10.5px;
+      color: var(--text-primary);
     }
 
     .friday-chip.active-vetro {
-      background: rgba(13, 148, 136, 0.25);
+      background: rgba(13, 148, 136, 0.2);
+      border-color: #0D9488;
+    }
+
+    html.light-mode .friday-chip.active-vetro {
+      background: #CCFBF1;
       border-color: #0D9488;
     }
 
     .friday-chip.active-carta {
-      background: rgba(2, 132, 199, 0.25);
+      background: rgba(2, 132, 199, 0.2);
       border-color: #0284C7;
+    }
+
+    html.light-mode .friday-chip.active-carta {
+      background: #E0F2FE;
+      border-color: #0284C7;
+    }
+
+    .friday-chip-idx {
+      font-weight: 700;
+      font-size: 10px;
+    }
+
+    .friday-chip-mat {
+      font-weight: 800;
+      margin-top: 2px;
+      color: var(--text-primary);
     }
 
     /* 6. Quick Action Buttons */
@@ -444,7 +554,7 @@
       background: linear-gradient(135deg, #10B981, #059669);
       border: none;
       color: #FFFFFF;
-      font-size: 13.5px;
+      font-size: 14px;
       font-weight: 800;
       padding: 14px;
       border-radius: 18px;
@@ -463,7 +573,8 @@
     /* Live Clock / Online Indicator */
     .online-indicator {
       text-align: center;
-      font-size: 10.5px;
+      font-size: 11px;
+      font-weight: 600;
       color: var(--text-muted);
       margin-top: 2px;
     }
@@ -484,7 +595,7 @@
         <div>
           <h1 class="header-title">Raccolta Corato</h1>
           <div class="header-badge">
-            <span style="color:#10B981">●</span> Centro Abitato · SANB
+            <span>●</span> Centro Abitato · SANB
           </div>
         </div>
       </div>
@@ -506,7 +617,7 @@
           Caricamento...
         </div>
       </div>
-      <span style="font-size: 16px; color: #38BDF8; font-weight: 800;">›</span>
+      <span style="font-size: 16px; color: var(--banner-mat); font-weight: 800;">›</span>
     </div>
 
     <!-- 3. Weekly 7-Day Navigation Bar -->
@@ -532,17 +643,17 @@
       <div class="info-panels">
         <div class="info-panel">
           <div class="panel-label-green">✓ COSA CONFERIRE:</div>
-          <div id="heroCosaSi" style="color: rgba(255,255,255,0.85);">...</div>
+          <div id="heroCosaSi" class="panel-desc">...</div>
         </div>
 
         <div class="info-panel">
           <div class="panel-label-red">✕ DA NON CONFERIRE:</div>
-          <div id="heroCosaNo" style="color: rgba(255,255,255,0.85);">...</div>
+          <div id="heroCosaNo" class="panel-desc">...</div>
         </div>
 
         <div class="info-panel tip-panel" id="heroTipPanel">
           <div class="panel-label-accent" id="heroTipTitle">💡 NOTA SANB CORATO:</div>
-          <div id="heroTip" style="color: #FFFFFF;">...</div>
+          <div id="heroTip" class="panel-tip-desc">...</div>
         </div>
       </div>
     </div>
@@ -606,7 +717,7 @@
         tip: "Attenzione regola Corato: il vetro si conferisce solo il 1° VENERDÌ DEL MESE, senza buste nel mastello."
       },
       "Secco residuo": {
-        accent: "#94A3B8",
+        accent: "#64748B",
         box: "🔘 Mastello Grigio (TAG)",
         cosaSi: "• Scontrini in carta termica, spazzolini, penne<br>• Pannolini, assorbenti, lettiere animali, polvere",
         cosaNo: "• Materiali riciclabili (umido, carta, plastica, vetro)<br>• Pile, farmaci scaduti, rifiuti speciali e RAEE",
@@ -625,32 +736,27 @@
     const NOMI_GIORNI_BREVI = ["DOM", "LUN", "MAR", "MER", "GIO", "VEN", "SAB"];
     const NOMI_MESI = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
 
-    let timeOffsetMs = 0; // Sincronizzazione con ora online
+    let timeOffsetMs = 0;
     let currentWeekDays = [];
     let currentDayIdx = 0;
     let isDark = true;
     let lastRenderedDateKey = "";
 
-    // Funzione per ottenere la data corrente precisa
     function getNow() {
       return new Date(Date.now() + timeOffsetMs);
     }
 
-    // Regola di Corato: calcola quale venerdì del mese è
     function getFridayNumberInMonth(date) {
       let count = 0;
       for (let day = 1; day <= date.getDate(); day++) {
         let check = new Date(date.getFullYear(), date.getMonth(), day);
-        if (check.getDay() === 5) { // 5 = Venerdì
-          count++;
-        }
+        if (check.getDay() === 5) count++;
       }
       return count;
     }
 
-    // Calcolo materiale per una specifica data
     function getRaccoltaPerData(date) {
-      const dayOfWeek = date.getDay(); // 0: Dom, 1: Lun, 2: Mar, 3: Mer, 4: Gio, 5: Ven, 6: Sab
+      const dayOfWeek = date.getDay();
       switch (dayOfWeek) {
         case 1: return { mat: "Umido", emoji: "🌱" };
         case 2: return { mat: "Plastica + Lattine", emoji: "🧴" };
@@ -658,20 +764,14 @@
         case 4: return { mat: "Secco residuo", emoji: "🗑️" };
         case 5:
           const numVen = getFridayNumberInMonth(date);
-          if (numVen === 1) {
-            return { mat: "Vetro", emoji: "🍾" };
-          }
-          return { mat: "Carta e cartoncino", emoji: "📦" };
+          return (numVen === 1) ? { mat: "Vetro", emoji: "🍾" } : { mat: "Carta e cartoncino", emoji: "📦" };
         case 6: return { mat: "Umido", emoji: "🌱" };
         default: return { mat: "Nessuna raccolta", emoji: "❌" };
       }
     }
 
-    // Calcola i 7 giorni della settimana corrente (da Lunedì a Domenica)
     function buildCurrentWeekDays(now) {
       const dayOfWeek = now.getDay();
-      // In JS: 0=Domenica, 1=Lunedì, ..., 6=Sabato
-      // Calcolo offset per partire da Lunedì
       const diffToMonday = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
       const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday);
       monday.setHours(0, 0, 0, 0);
@@ -701,7 +801,6 @@
       return days;
     }
 
-    // Calcola tutti i venerdì del mese corrente
     function getFridaysOfMonth(now) {
       const year = now.getFullYear();
       const month = now.getMonth();
@@ -725,33 +824,22 @@
       return fridays;
     }
 
-    // Inizializza e aggiorna tutto il calendario
     function updateCalendar(forceToday = false) {
       const now = getNow();
       const dateKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
-      
       const dayChanged = (dateKey !== lastRenderedDateKey);
       lastRenderedDateKey = dateKey;
 
       currentWeekDays = buildCurrentWeekDays(now);
-
-      // Trova l'indice di "Oggi" nella settimana
       const todayIndex = currentWeekDays.findIndex(d => d.isToday);
       
       if (dayChanged || forceToday || currentDayIdx < 0 || currentDayIdx >= 7) {
         currentDayIdx = (todayIndex >= 0 ? todayIndex : 0);
       }
 
-      // Aggiorna banner "Stasera cosa esporre per domani"
       updateTonightBanner(now);
-
-      // Renderizza la barra delle pillole settimanali
       renderWeekPills();
-
-      // Renderizza il widget dei venerdì del mese
       renderFridayWidget(now);
-
-      // Seleziona il giorno attivo
       selectDay(currentDayIdx);
     }
 
@@ -764,8 +852,7 @@
       if (tomorrowInfo.mat === "Nessuna raccolta") {
         descEl.innerHTML = `Nessun mastello da esporre stasera (${tomorrowName} non c'è raccolta)`;
       } else {
-        const matData = INFO_MATERIALI[tomorrowInfo.mat] || {};
-        descEl.innerHTML = `Domani (${tomorrowName}) ritirano: <span style="color: #38BDF8; font-weight:800;">${tomorrowInfo.emoji} ${tomorrowInfo.mat}</span> · Esporre mastello`;
+        descEl.innerHTML = `Domani (${tomorrowName}) ritirano: <span style="color: var(--banner-mat); font-weight:800;">${tomorrowInfo.emoji} ${tomorrowInfo.mat}</span> · Esporre mastello`;
       }
     }
 
@@ -789,7 +876,7 @@
           <span class="day-pill-short">${d.short}</span>
           <span class="day-pill-emoji">${d.emoji}</span>
           <span class="day-pill-num">${d.dayNumber}</span>
-          ${d.isToday ? '<span class="today-dot"></span>' : '<span style="height:4px;"></span>'}
+          ${d.isToday ? '<span class="today-dot"></span>' : '<span style="height:5px;"></span>'}
         `;
 
         pill.onclick = () => selectDay(idx);
@@ -812,11 +899,13 @@
 
         const chip = document.createElement("div");
         chip.className = `friday-chip ${f.isVetro ? 'active-vetro' : (isSel ? 'active-carta' : '')}`;
+        const colorAcc = f.isVetro ? '#0D9488' : '#0284C7';
+        
         chip.innerHTML = `
-          <div style="font-weight:700; color: ${f.isVetro ? '#0D9488' : '#0284C7'}; font-size: 10px;">
+          <div class="friday-chip-idx" style="color: ${colorAcc};">
             ${f.num}° Ven · ${String(f.day).padStart(2, '0')}
           </div>
-          <div style="font-weight:800; margin-top: 2px;">${f.mat}</div>
+          <div class="friday-chip-mat">${f.mat}</div>
         `;
         container.appendChild(chip);
       });
@@ -841,7 +930,7 @@
       document.getElementById("heroTip").textContent = matData.tip;
 
       const heroOrb = document.getElementById("heroOrb");
-      heroOrb.style.background = `radial-gradient(circle, ${matData.accent} 0%, rgba(255,255,255,0.05) 75%)`;
+      heroOrb.style.background = `radial-gradient(circle, ${matData.accent} 0%, rgba(255,255,255,0.06) 75%)`;
       heroOrb.style.borderColor = matData.accent;
 
       const heroCard = document.getElementById("heroCard");
@@ -868,26 +957,18 @@
 
     function toggleTheme() {
       isDark = !isDark;
+      const htmlEl = document.documentElement;
       const themeEmoji = document.getElementById("themeEmoji");
+      const metaTheme = document.getElementById("metaThemeColor");
 
       if (!isDark) {
-        document.documentElement.style.setProperty('--bg', '#EFF5F2');
-        document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.88)');
-        document.documentElement.style.setProperty('--card-border', 'rgba(255, 255, 255, 0.9)');
-        document.documentElement.style.setProperty('--inner-bg', 'rgba(244, 248, 246, 0.9)');
-        document.documentElement.style.setProperty('--inner-border', 'rgba(215, 228, 222, 0.8)');
-        document.documentElement.style.setProperty('--text', '#0F172A');
-        document.documentElement.style.setProperty('--text-muted', '#64748B');
+        htmlEl.classList.add("light-mode");
         themeEmoji.textContent = '🌙';
+        if (metaTheme) metaTheme.setAttribute("content", "#EEF4F1");
       } else {
-        document.documentElement.style.setProperty('--bg', '#0B0F17');
-        document.documentElement.style.setProperty('--card-bg', 'rgba(22, 32, 46, 0.75)');
-        document.documentElement.style.setProperty('--card-border', 'rgba(255, 255, 255, 0.12)');
-        document.documentElement.style.setProperty('--inner-bg', 'rgba(255, 255, 255, 0.05)');
-        document.documentElement.style.setProperty('--inner-border', 'rgba(255, 255, 255, 0.08)');
-        document.documentElement.style.setProperty('--text', '#F8FAFC');
-        document.documentElement.style.setProperty('--text-muted', '#94A3B8');
+        htmlEl.classList.remove("light-mode");
         themeEmoji.textContent = '☀️';
+        if (metaTheme) metaTheme.setAttribute("content", "#0B0F17");
       }
       selectDay(currentDayIdx);
     }
@@ -914,12 +995,10 @@
           document.getElementById("onlineIndicator").textContent = "🟢 Sincronizzato con ora online (Fuso di Roma)";
         }
       } catch (err) {
-        // Se offline o bloccato, l'orario di sistema dell'iPhone è comunque perfetto (NTP)
         document.getElementById("onlineIndicator").textContent = "📱 Ora rilevata dal dispositivo";
       }
     }
 
-    // Rileva automaticamente cambio app o riapertura da background
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) {
         updateCalendar();
@@ -927,15 +1006,9 @@
       }
     });
 
-    window.addEventListener("focus", () => {
-      updateCalendar();
-    });
+    window.addEventListener("focus", () => updateCalendar());
+    window.addEventListener("pageshow", () => updateCalendar());
 
-    window.addEventListener("pageshow", () => {
-      updateCalendar();
-    });
-
-    // Controllo periodico ogni 30 secondi (es. passaggio della mezzanotte)
     setInterval(() => {
       const now = getNow();
       const dateKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
@@ -944,14 +1017,12 @@
       }
     }, 30000);
 
-    // Registrazione Service Worker per funzionamento offline
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').then((reg) => {
         reg.update();
       }).catch(() => {});
     }
 
-    // Avvio immediato con ora locale, poi sync online
     updateCalendar(true);
     syncOnlineClock();
   </script>
