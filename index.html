@@ -179,6 +179,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      cursor: pointer;
     }
 
     .tonight-badge {
@@ -408,7 +409,7 @@
 
     .friday-chips {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
       gap: 6px;
     }
 
@@ -459,24 +460,12 @@
       transform: scale(0.96);
     }
 
-    /* Install Sheet / Helper */
-    .install-hint {
+    /* Live Clock / Online Indicator */
+    .online-indicator {
       text-align: center;
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--text-muted);
-      padding: 4px 0 12px;
-      line-height: 1.4;
-    }
-
-    .install-badge {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 3px 8px;
-      border-radius: 8px;
-      font-weight: 700;
-      color: #FFFFFF;
-      margin-top: 4px;
+      margin-top: 2px;
     }
   </style>
 </head>
@@ -495,7 +484,7 @@
         <div>
           <h1 class="header-title">Raccolta Corato</h1>
           <div class="header-badge">
-            <span>●</span> Centro Abitato · SANB
+            <span style="color:#10B981">●</span> Centro Abitato · SANB
           </div>
         </div>
       </div>
@@ -514,7 +503,7 @@
       <div>
         <span class="tonight-badge">🌙 STASERA (21:00 - 24:00)</span>
         <div class="tonight-text" id="tonightDesc">
-          Domani ritirano: <span id="tonightMat" style="color: #38BDF8; font-weight:800;">📦 Carta e cartoncino</span>
+          Caricamento...
         </div>
       </div>
       <span style="font-size: 16px; color: #38BDF8; font-weight: 800;">›</span>
@@ -522,46 +511,38 @@
 
     <!-- 3. Weekly 7-Day Navigation Bar -->
     <div class="glass-card week-pills-bar" id="weekPills">
-      <!-- Injected via JS -->
+      <!-- Generato dinamicamente via JS -->
     </div>
 
     <!-- 4. Hero Showcase Glass Card -->
     <div class="glass-card hero-card" id="heroCard">
       <div class="hero-top-row">
-        <span class="hero-date-badge" id="heroBadgeDate">✨ OGGI · GIOVEDÌ 12 NOV</span>
-        <span class="hero-box-badge" id="heroBadgeBox">🔘 Mastello Grigio (TAG)</span>
+        <span class="hero-date-badge" id="heroBadgeDate">...</span>
+        <span class="hero-box-badge" id="heroBadgeBox">...</span>
       </div>
 
       <div class="hero-center">
         <div class="hero-orb" id="heroOrb">
-          <span id="heroEmoji">🗑️</span>
+          <span id="heroEmoji">🌱</span>
         </div>
-        <h2 class="hero-title" id="heroTitle">Secco residuo</h2>
+        <h2 class="hero-title" id="heroTitle">...</h2>
         <div class="hero-timing">⏰ Ritiro al mattino · Esposizione 21:00 - 24:00</div>
       </div>
 
       <div class="info-panels">
         <div class="info-panel">
           <div class="panel-label-green">✓ COSA CONFERIRE:</div>
-          <div id="heroCosaSi" style="color: rgba(255,255,255,0.85);">
-            • Scontrini in carta termica, spazzolini, penne<br>
-            • Pannolini, assorbenti, lettiere animali, polvere
-          </div>
+          <div id="heroCosaSi" style="color: rgba(255,255,255,0.85);">...</div>
         </div>
 
         <div class="info-panel">
           <div class="panel-label-red">✕ DA NON CONFERIRE:</div>
-          <div id="heroCosaNo" style="color: rgba(255,255,255,0.85);">
-            • Materiali riciclabili (umido, carta, plastica, vetro)<br>
-            • Pile, farmaci, rifiuti speciali e RAEE
-          </div>
+          <div id="heroCosaNo" style="color: rgba(255,255,255,0.85);">...</div>
         </div>
 
         <div class="info-panel tip-panel" id="heroTipPanel">
           <div class="panel-label-accent" id="heroTipTitle">💡 NOTA SANB CORATO:</div>
-          <div id="heroTip" style="color: #FFFFFF;">
-            Utilizza esclusivamente il mastello grigio dotato di microchip RFID associato alla tua utenza TARI.
-          </div>
+          <div id="heroTip" style="color: #FFFFFF;">...</div>
         </div>
       </div>
     </div>
@@ -573,7 +554,7 @@
         <span class="friday-subtitle">1° Ven: Vetro · Altri: Carta</span>
       </div>
       <div class="friday-chips" id="fridayChips">
-        <!-- Injected via JS -->
+        <!-- Generato dinamicamente via JS -->
       </div>
     </div>
 
@@ -587,109 +568,254 @@
       </button>
     </div>
 
-    <!-- Install on iPhone helper hint -->
-    <div class="install-hint">
-      Tocca <b style="color: #38BDF8;">Condividi ⎋</b> in Safari su iPhone e seleziona:<br>
-      <span class="install-badge">➕ Aggiungi a schermata Home</span>
+    <div class="online-indicator" id="onlineIndicator">
+      Data aggiornata in tempo reale · Comune di Corato
     </div>
 
   </div>
 
   <script>
-    const DAYS = [
-      {
-        short: "LUN", name: "Lunedì", date: "9", emoji: "🌱", mat: "Umido",
-        accent: "#10B981", box: "🟤 Mastello Marrone", isToday: false,
+    // Database Materiali SANB Corato
+    const INFO_MATERIALI = {
+      "Umido": {
+        accent: "#10B981",
+        box: "🟤 Mastello Marrone",
         cosaSi: "• Avanzi di cibo crudi e cotti, bucce e torsoli<br>• Fondi di caffè, filtri di tè, tovaglioli di carta unti",
         cosaNo: "• Buste di plastica tradizionale non compostabili<br>• Pannolini, assorbenti, mozziconi di sigaretta",
         tip: "Usa solo sacchetti compostabili certificati UNI EN 13432 chiusi nel mastello marrone."
       },
-      {
-        short: "MAR", name: "Martedì", date: "10", emoji: "🧴", mat: "Plastica + Lattine",
-        accent: "#F59E0B", box: "🟡 Busta / Mastello Giallo", isToday: false,
+      "Plastica + Lattine": {
+        accent: "#F59E0B",
+        box: "🟡 Busta / Mastello Giallo",
         cosaSi: "• Bottiglie d'acqua e bibite, flaconi detersivo/shampoo<br>• Lattine in alluminio, vaschette alimentari e barattoli",
         cosaNo: "• Giocattoli in plastica dura, bacinelle, gomma<br>• Posate monouso sporche e custodie CD/DVD",
         tip: "Svuota e schiaccia le bottiglie in senso orizzontale per ridurre al minimo il volume."
       },
-      {
-        short: "MER", name: "Mercoledì", date: "11", emoji: "🌱", mat: "Umido",
-        accent: "#10B981", box: "🟤 Mastello Marrone", isToday: false,
-        cosaSi: "• Scarti di cibo, bucce, tovaglioli unti, gusci d'uovo<br>• Fondi di caffè e piccoli scarti organici",
-        cosaNo: "• Buste di plastica tradizionale, lettiere non biodegradabili",
-        tip: "L'umido viene ritirato 3 volte a settimana a Corato (Lunedì, Mercoledì, Sabato)."
+      "Carta e cartoncino": {
+        accent: "#0284C7",
+        box: "🔵 Mastello / Busta Blu",
+        cosaSi: "• Scatole in cartone piegate, giornali, riviste, libri<br>• Cartoni per bevande e latte (Tetra Pak ben sciacquati)",
+        cosaNo: "• Carta forno, carta oleata, cartoni pizza con cibo<br>• Scontrini fiscali (vanno nel secco residuo!)",
+        tip: "A Corato solo il 1° venerdì del mese è Vetro. Oggi è il turno di Carta e cartoncino!"
       },
-      {
-        short: "GIO", name: "Giovedì", date: "12", emoji: "🗑️", mat: "Secco residuo",
-        accent: "#94A3B8", box: "🔘 Mastello Grigio (TAG)", isToday: true,
+      "Vetro": {
+        accent: "#0D9488",
+        box: "🟢 Mastello Verde (senza busta)",
+        cosaSi: "• Bottiglie di vetro per bevande, vino, birra e olio<br>• Vasetti e barattoli per conserve, sughi e marmellate",
+        cosaNo: "• Bicchieri, piatti in ceramica o porcellana, specchi<br>• Pirex e cristallo (non riciclabili col vetro)",
+        tip: "Attenzione regola Corato: il vetro si conferisce solo il 1° VENERDÌ DEL MESE, senza buste nel mastello."
+      },
+      "Secco residuo": {
+        accent: "#94A3B8",
+        box: "🔘 Mastello Grigio (TAG)",
         cosaSi: "• Scontrini in carta termica, spazzolini, penne<br>• Pannolini, assorbenti, lettiere animali, polvere",
         cosaNo: "• Materiali riciclabili (umido, carta, plastica, vetro)<br>• Pile, farmaci scaduti, rifiuti speciali e RAEE",
         tip: "Utilizza esclusivamente il mastello grigio dotato di microchip RFID associato alla tua utenza."
       },
-      {
-        short: "VEN", name: "Venerdì", date: "13", emoji: "📦", mat: "Carta e cartoncino",
-        accent: "#0284C7", box: "🔵 Mastello / Busta Blu", isToday: false,
-        cosaSi: "• Scatole in cartone piegate, giornali, riviste, libri<br>• Cartoni per bevande e latte (Tetra Pak ben sciacquati)",
-        cosaNo: "• Carta forno, carta oleata, cartoni pizza con cibo<br>• Scontrini fiscali (vanno nel secco residuo!)",
-        tip: "A Corato solo il 1° venerdì del mese è Vetro. Oggi è il 2° venerdì, quindi Carta e cartoncino!"
-      },
-      {
-        short: "SAB", name: "Sabato", date: "14", emoji: "🌱", mat: "Umido",
-        accent: "#10B981", box: "🟤 Mastello Marrone", isToday: false,
-        cosaSi: "• Avanzi alimentari, bucce, fondi di caffè e filtri di tè<br>• Scarti organici del fine settimana",
-        cosaNo: "• Buste di plastica tradizionale, mozziconi",
-        tip: "Ultimo ritiro della settimana prima della pausa domenicale."
-      },
-      {
-        short: "DOM", name: "Domenica", date: "15", emoji: "❌", mat: "Nessuna raccolta",
-        accent: "#F43F5E", box: "🚫 Nessun mastello", isToday: false,
+      "Nessuna raccolta": {
+        accent: "#F43F5E",
+        box: "🚫 Nessun mastello",
         cosaSi: "• Nessun conferimento previsto la domenica.<br>• Goditi la giornata di riposo!",
         cosaNo: "• Non abbandonare rifiuti o mastelli sul suolo pubblico.",
         tip: "Domenica sera ricordati di esporre l'Umido per il ritiro di lunedì mattina!"
       }
-    ];
+    };
 
-    let currentDayIdx = 3;
+    const NOMI_GIORNI = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
+    const NOMI_GIORNI_BREVI = ["DOM", "LUN", "MAR", "MER", "GIO", "VEN", "SAB"];
+    const NOMI_MESI = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
+
+    let timeOffsetMs = 0; // Sincronizzazione con ora online
+    let currentWeekDays = [];
+    let currentDayIdx = 0;
     let isDark = true;
+    let lastRenderedDateKey = "";
 
-    function renderWeek() {
+    // Funzione per ottenere la data corrente precisa
+    function getNow() {
+      return new Date(Date.now() + timeOffsetMs);
+    }
+
+    // Regola di Corato: calcola quale venerdì del mese è
+    function getFridayNumberInMonth(date) {
+      let count = 0;
+      for (let day = 1; day <= date.getDate(); day++) {
+        let check = new Date(date.getFullYear(), date.getMonth(), day);
+        if (check.getDay() === 5) { // 5 = Venerdì
+          count++;
+        }
+      }
+      return count;
+    }
+
+    // Calcolo materiale per una specifica data
+    function getRaccoltaPerData(date) {
+      const dayOfWeek = date.getDay(); // 0: Dom, 1: Lun, 2: Mar, 3: Mer, 4: Gio, 5: Ven, 6: Sab
+      switch (dayOfWeek) {
+        case 1: return { mat: "Umido", emoji: "🌱" };
+        case 2: return { mat: "Plastica + Lattine", emoji: "🧴" };
+        case 3: return { mat: "Umido", emoji: "🌱" };
+        case 4: return { mat: "Secco residuo", emoji: "🗑️" };
+        case 5:
+          const numVen = getFridayNumberInMonth(date);
+          if (numVen === 1) {
+            return { mat: "Vetro", emoji: "🍾" };
+          }
+          return { mat: "Carta e cartoncino", emoji: "📦" };
+        case 6: return { mat: "Umido", emoji: "🌱" };
+        default: return { mat: "Nessuna raccolta", emoji: "❌" };
+      }
+    }
+
+    // Calcola i 7 giorni della settimana corrente (da Lunedì a Domenica)
+    function buildCurrentWeekDays(now) {
+      const dayOfWeek = now.getDay();
+      // In JS: 0=Domenica, 1=Lunedì, ..., 6=Sabato
+      // Calcolo offset per partire da Lunedì
+      const diffToMonday = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
+      const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday);
+      monday.setHours(0, 0, 0, 0);
+
+      const days = [];
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i);
+        const dow = d.getDay();
+        const info = getRaccoltaPerData(d);
+        const isToday = (
+          d.getDate() === now.getDate() &&
+          d.getMonth() === now.getMonth() &&
+          d.getFullYear() === now.getFullYear()
+        );
+
+        days.push({
+          dateObj: d,
+          name: NOMI_GIORNI[dow],
+          short: NOMI_GIORNI_BREVI[dow],
+          dayNumber: d.getDate(),
+          monthName: NOMI_MESI[d.getMonth()],
+          mat: info.mat,
+          emoji: info.emoji,
+          isToday: isToday
+        });
+      }
+      return days;
+    }
+
+    // Calcola tutti i venerdì del mese corrente
+    function getFridaysOfMonth(now) {
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const fridays = [];
+      let d = new Date(year, month, 1);
+      let count = 0;
+
+      while (d.getMonth() === month) {
+        if (d.getDay() === 5) {
+          count++;
+          fridays.push({
+            num: count,
+            day: d.getDate(),
+            mat: (count === 1 ? "🍾 VETRO" : "📦 CARTA"),
+            isVetro: (count === 1),
+            dateObj: new Date(d)
+          });
+        }
+        d.setDate(d.getDate() + 1);
+      }
+      return fridays;
+    }
+
+    // Inizializza e aggiorna tutto il calendario
+    function updateCalendar(forceToday = false) {
+      const now = getNow();
+      const dateKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+      
+      const dayChanged = (dateKey !== lastRenderedDateKey);
+      lastRenderedDateKey = dateKey;
+
+      currentWeekDays = buildCurrentWeekDays(now);
+
+      // Trova l'indice di "Oggi" nella settimana
+      const todayIndex = currentWeekDays.findIndex(d => d.isToday);
+      
+      if (dayChanged || forceToday || currentDayIdx < 0 || currentDayIdx >= 7) {
+        currentDayIdx = (todayIndex >= 0 ? todayIndex : 0);
+      }
+
+      // Aggiorna banner "Stasera cosa esporre per domani"
+      updateTonightBanner(now);
+
+      // Renderizza la barra delle pillole settimanali
+      renderWeekPills();
+
+      // Renderizza il widget dei venerdì del mese
+      renderFridayWidget(now);
+
+      // Seleziona il giorno attivo
+      selectDay(currentDayIdx);
+    }
+
+    function updateTonightBanner(now) {
+      const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const tomorrowInfo = getRaccoltaPerData(tomorrow);
+      const tomorrowName = NOMI_GIORNI[tomorrow.getDay()];
+      const descEl = document.getElementById("tonightDesc");
+
+      if (tomorrowInfo.mat === "Nessuna raccolta") {
+        descEl.innerHTML = `Nessun mastello da esporre stasera (${tomorrowName} non c'è raccolta)`;
+      } else {
+        const matData = INFO_MATERIALI[tomorrowInfo.mat] || {};
+        descEl.innerHTML = `Domani (${tomorrowName}) ritirano: <span style="color: #38BDF8; font-weight:800;">${tomorrowInfo.emoji} ${tomorrowInfo.mat}</span> · Esporre mastello`;
+      }
+    }
+
+    function renderWeekPills() {
       const container = document.getElementById("weekPills");
       container.innerHTML = "";
-      DAYS.forEach((d, idx) => {
+
+      currentWeekDays.forEach((d, idx) => {
         const isSel = (idx === currentDayIdx);
+        const matData = INFO_MATERIALI[d.mat] || { accent: "#10B981" };
         const pill = document.createElement("div");
         pill.className = `day-pill ${isSel ? 'active' : ''}`;
+        
         if (isSel) {
-          pill.style.background = d.accent;
-          pill.style.borderColor = d.accent;
-          pill.style.boxShadow = `0 4px 14px -2px ${d.accent}`;
+          pill.style.background = matData.accent;
+          pill.style.borderColor = matData.accent;
+          pill.style.boxShadow = `0 4px 14px -2px ${matData.accent}`;
         }
+
         pill.innerHTML = `
           <span class="day-pill-short">${d.short}</span>
           <span class="day-pill-emoji">${d.emoji}</span>
-          <span class="day-pill-num">${d.date}</span>
+          <span class="day-pill-num">${d.dayNumber}</span>
           ${d.isToday ? '<span class="today-dot"></span>' : '<span style="height:4px;"></span>'}
         `;
+
         pill.onclick = () => selectDay(idx);
         container.appendChild(pill);
       });
     }
 
-    function renderFridays() {
+    function renderFridayWidget(now) {
       const container = document.getElementById("fridayChips");
-      const fridays = [
-        { num: 1, day: "06", mat: "🍾 VETRO", isVetro: true },
-        { num: 2, day: "13", mat: "📦 CARTA", isVetro: false },
-        { num: 3, day: "20", mat: "📦 Carta", isVetro: false },
-        { num: 4, day: "27", mat: "📦 Carta", isVetro: false }
-      ];
-
       container.innerHTML = "";
+      const fridays = getFridaysOfMonth(now);
+      const selDayObj = currentWeekDays[currentDayIdx]?.dateObj || now;
+
       fridays.forEach((f) => {
+        const isSel = (
+          selDayObj.getDay() === 5 &&
+          selDayObj.getDate() === f.day &&
+          selDayObj.getMonth() === f.dateObj.getMonth()
+        );
+
         const chip = document.createElement("div");
-        const isSel = (currentDayIdx === 4 && f.num === 2);
         chip.className = `friday-chip ${f.isVetro ? 'active-vetro' : (isSel ? 'active-carta' : '')}`;
         chip.innerHTML = `
-          <div style="font-weight:700; color: ${f.isVetro ? '#0D9488' : '#0284C7'}; font-size: 10px;">${f.num}° Ven · ${f.day}</div>
+          <div style="font-weight:700; color: ${f.isVetro ? '#0D9488' : '#0284C7'}; font-size: 10px;">
+            ${f.num}° Ven · ${String(f.day).padStart(2, '0')}
+          </div>
           <div style="font-weight:800; margin-top: 2px;">${f.mat}</div>
         `;
         container.appendChild(chip);
@@ -699,42 +825,49 @@
     function selectDay(idx) {
       if (navigator.vibrate) navigator.vibrate(10);
       currentDayIdx = idx;
-      const d = DAYS[idx];
-      document.documentElement.style.setProperty('--accent', d.accent);
+      const d = currentWeekDays[idx];
+      if (!d) return;
 
-      document.getElementById("heroBadgeDate").textContent = d.isToday
-        ? `✨ OGGI · ${d.name.toUpperCase()} ${d.date} NOV`
-        : `✨ ${d.name.toUpperCase()} ${d.date} NOV`;
-      document.getElementById("heroBadgeBox").textContent = d.box;
+      const matData = INFO_MATERIALI[d.mat] || INFO_MATERIALI["Umido"];
+      document.documentElement.style.setProperty('--accent', matData.accent);
+
+      const dateStr = `${d.name.toUpperCase()} ${d.dayNumber} ${d.monthName.toUpperCase()}`;
+      document.getElementById("heroBadgeDate").textContent = d.isToday ? `✨ OGGI · ${dateStr}` : `✨ ${dateStr}`;
+      document.getElementById("heroBadgeBox").textContent = matData.box;
       document.getElementById("heroEmoji").textContent = d.emoji;
       document.getElementById("heroTitle").textContent = d.mat;
-      document.getElementById("heroCosaSi").innerHTML = d.cosaSi;
-      document.getElementById("heroCosaNo").innerHTML = d.cosaNo;
-      document.getElementById("heroTip").textContent = d.tip;
+      document.getElementById("heroCosaSi").innerHTML = matData.cosaSi;
+      document.getElementById("heroCosaNo").innerHTML = matData.cosaNo;
+      document.getElementById("heroTip").textContent = matData.tip;
 
       const heroOrb = document.getElementById("heroOrb");
-      heroOrb.style.background = `radial-gradient(circle, ${d.accent} 0%, rgba(255,255,255,0.05) 75%)`;
-      heroOrb.style.borderColor = d.accent;
+      heroOrb.style.background = `radial-gradient(circle, ${matData.accent} 0%, rgba(255,255,255,0.05) 75%)`;
+      heroOrb.style.borderColor = matData.accent;
 
       const heroCard = document.getElementById("heroCard");
-      heroCard.style.borderColor = d.accent;
-      heroCard.style.boxShadow = `0 8px 30px -8px ${d.accent}`;
+      heroCard.style.borderColor = matData.accent;
+      heroCard.style.boxShadow = `0 8px 30px -8px ${matData.accent}`;
 
-      renderWeek();
-      renderFridays();
+      renderWeekPills();
+      renderFridayWidget(getNow());
     }
 
     function selectToday() {
-      selectDay(3);
+      const todayIndex = currentWeekDays.findIndex(d => d.isToday);
+      if (todayIndex >= 0) {
+        selectDay(todayIndex);
+      } else {
+        updateCalendar(true);
+      }
     }
 
     function selectTomorrow() {
-      selectDay((currentDayIdx + 1) % 7);
+      const nextIdx = (currentDayIdx + 1) % 7;
+      selectDay(nextIdx);
     }
 
     function toggleTheme() {
       isDark = !isDark;
-      const body = document.body;
       const themeEmoji = document.getElementById("themeEmoji");
 
       if (!isDark) {
@@ -761,17 +894,66 @@
 
     function testNotif() {
       if (navigator.vibrate) navigator.vibrate([20, 50, 20]);
-      const tomorrow = DAYS[(currentDayIdx + 1) % 7];
-      alert(`🔔 Raccolta Corato:\nStasera tra le 21:00 e le 24:00 prepara ed esponi: ${tomorrow.emoji} ${tomorrow.mat} per domani ${tomorrow.name}!`);
+      const now = getNow();
+      const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const tomorrowInfo = getRaccoltaPerData(tomorrow);
+      const tomorrowName = NOMI_GIORNI[tomorrow.getDay()];
+
+      alert(`🔔 Raccolta Corato:\nStasera tra le 21:00 e le 24:00 prepara ed esponi: ${tomorrowInfo.emoji} ${tomorrowInfo.mat} per la raccolta di domani ${tomorrowName}!`);
     }
 
-    // Register Service Worker for offline iOS use
+    // Sincronizzazione precisa con ora online europea (Rome / Bari)
+    async function syncOnlineClock() {
+      try {
+        const res = await fetch("https://worldtimeapi.org/api/timezone/Europe/Rome", { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          const serverTime = new Date(data.datetime).getTime();
+          timeOffsetMs = serverTime - Date.now();
+          updateCalendar();
+          document.getElementById("onlineIndicator").textContent = "🟢 Sincronizzato con ora online (Fuso di Roma)";
+        }
+      } catch (err) {
+        // Se offline o bloccato, l'orario di sistema dell'iPhone è comunque perfetto (NTP)
+        document.getElementById("onlineIndicator").textContent = "📱 Ora rilevata dal dispositivo";
+      }
+    }
+
+    // Rileva automaticamente cambio app o riapertura da background
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        updateCalendar();
+        syncOnlineClock();
+      }
+    });
+
+    window.addEventListener("focus", () => {
+      updateCalendar();
+    });
+
+    window.addEventListener("pageshow", () => {
+      updateCalendar();
+    });
+
+    // Controllo periodico ogni 30 secondi (es. passaggio della mezzanotte)
+    setInterval(() => {
+      const now = getNow();
+      const dateKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+      if (dateKey !== lastRenderedDateKey) {
+        updateCalendar(true);
+      }
+    }, 30000);
+
+    // Registrazione Service Worker per funzionamento offline
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
+      navigator.serviceWorker.register('sw.js').then((reg) => {
+        reg.update();
+      }).catch(() => {});
     }
 
-    // Init
-    selectDay(3);
+    // Avvio immediato con ora locale, poi sync online
+    updateCalendar(true);
+    syncOnlineClock();
   </script>
 </body>
 </html>
