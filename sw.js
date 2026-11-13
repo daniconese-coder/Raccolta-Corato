@@ -1,4 +1,4 @@
-const CACHE_NAME = 'raccolta-corato-v3';
+const CACHE_NAME = 'raccolta-corato-v5';
 const ASSETS = [
   './',
   './index.html',

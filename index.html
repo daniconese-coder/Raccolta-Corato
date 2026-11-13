@@ -7,74 +7,43 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Raccolta Corato">
-  <meta name="theme-color" content="#0B0F17" id="metaThemeColor">
+  <meta name="theme-color" content="#0B0F17">
   
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
 
   <style>
-    /* Dark Theme (Default: Liquid Obsidian) */
+    /* Pure Liquid Obsidian Glass Theme */
     :root {
       --bg: #0B0F17;
-      --card-bg: rgba(22, 32, 46, 0.78);
+      --card-bg: rgba(18, 26, 38, 0.85);
       --card-border: rgba(255, 255, 255, 0.12);
-      --card-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.45);
+      --card-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.55);
       
-      --inner-bg: rgba(255, 255, 255, 0.05);
+      --inner-bg: rgba(255, 255, 255, 0.06);
       --inner-border: rgba(255, 255, 255, 0.08);
       
       --text-primary: #F8FAFC;
-      --text-secondary: #94A3B8;
-      --text-muted: #64748B;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
       
-      --pill-bg: rgba(255, 255, 255, 0.05);
-      --pill-border: rgba(255, 255, 255, 0.09);
-      --pill-num: #F8FAFC;
-      --pill-short: #94A3B8;
+      --pill-bg: rgba(255, 255, 255, 0.06);
+      --pill-border: rgba(255, 255, 255, 0.1);
+      --pill-num: #FFFFFF;
+      --pill-short: #CBD5E1;
       
       --desc-text: #E2E8F0;
-      --tip-bg: rgba(16, 185, 129, 0.12);
-      --tip-border: rgba(16, 185, 129, 0.35);
+      --tip-bg: rgba(16, 185, 129, 0.14);
+      --tip-border: rgba(16, 185, 129, 0.4);
       --tip-text: #F8FAFC;
       
-      --banner-bg: linear-gradient(135deg, rgba(2, 132, 199, 0.16), rgba(16, 185, 129, 0.12));
+      --banner-bg: linear-gradient(135deg, rgba(2, 132, 199, 0.18), rgba(16, 185, 129, 0.14));
       --banner-border: rgba(56, 189, 248, 0.45);
       --banner-text: #FFFFFF;
       --banner-mat: #38BDF8;
-      --banner-badge-bg: rgba(2, 132, 199, 0.28);
+      --banner-badge-bg: rgba(2, 132, 199, 0.3);
       
       --accent: #10B981;
-    }
-
-    /* Light Theme (Frosted Pearl Glass - High Contrast) */
-    html.light-mode {
-      --bg: #EEF4F1;
-      --card-bg: rgba(255, 255, 255, 0.94);
-      --card-border: #D1DDD6;
-      --card-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
-      
-      --inner-bg: #F3F7F5;
-      --inner-border: #CBD8D0;
-      
-      --text-primary: #0F172A; /* Nero Slate profondo - massima leggibilità */
-      --text-secondary: #334155;
-      --text-muted: #475569;
-      
-      --pill-bg: #F1F6F3;
-      --pill-border: #C5D6CC;
-      --pill-num: #0F172A; /* Numeri data neri e ben visibili */
-      --pill-short: #334155; /* Nomi giorni scuri */
-      
-      --desc-text: #1E293B; /* Testo liste scuro e nitido */
-      --tip-bg: #ECFDF5;
-      --tip-border: #6EE7B7;
-      --tip-text: #064E3B; /* Testo consiglio scuro */
-      
-      --banner-bg: linear-gradient(135deg, #E0F2FE, #ECFDF5);
-      --banner-border: #7DD3FC;
-      --banner-text: #0F172A;
-      --banner-mat: #0284C7;
-      --banner-badge-bg: #BAE6FD;
     }
 
     * {
@@ -97,20 +66,19 @@
       padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 24px);
       padding-left: 16px;
       padding-right: 16px;
-      transition: background-color 0.35s ease, color 0.35s ease;
     }
 
     /* Ambient Liquid Orbs */
     .ambient-glow-top {
       position: fixed;
-      top: -60px;
-      right: -60px;
-      width: 280px;
-      height: 280px;
+      top: -70px;
+      right: -70px;
+      width: 300px;
+      height: 300px;
       border-radius: 50%;
       background: var(--accent);
-      opacity: 0.22;
-      filter: blur(75px);
+      opacity: 0.25;
+      filter: blur(80px);
       pointer-events: none;
       z-index: 0;
       transition: background 0.5s ease;
@@ -118,14 +86,14 @@
 
     .ambient-glow-bottom {
       position: fixed;
-      bottom: -60px;
-      left: -60px;
-      width: 260px;
-      height: 260px;
+      bottom: -70px;
+      left: -70px;
+      width: 280px;
+      height: 280px;
       border-radius: 50%;
       background: #0284C7;
-      opacity: 0.15;
-      filter: blur(80px);
+      opacity: 0.18;
+      filter: blur(85px);
       pointer-events: none;
       z-index: 0;
     }
@@ -167,66 +135,56 @@
     }
 
     .eco-orb {
-      width: 42px;
-      height: 42px;
-      border-radius: 21px;
-      background: rgba(16, 185, 129, 0.18);
+      width: 44px;
+      height: 44px;
+      border-radius: 22px;
+      background: rgba(16, 185, 129, 0.2);
       border: 1.5px solid #10B981;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 22px;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
     }
 
     .header-title {
       font-size: 18px;
       font-weight: 800;
       letter-spacing: -0.3px;
-      color: var(--text-primary);
+      color: #FFFFFF;
     }
 
     .header-badge {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       font-size: 11px;
       font-weight: 700;
-      color: #059669;
-      background: rgba(16, 185, 129, 0.15);
+      color: #34D399;
+      background: rgba(16, 185, 129, 0.16);
       border: 1px solid rgba(16, 185, 129, 0.4);
-      padding: 2px 8px;
+      padding: 2px 9px;
       border-radius: 999px;
-      margin-top: 2px;
-    }
-
-    html.light-mode .header-badge {
-      color: #047857;
-      background: #D1FAE5;
-      border-color: #6EE7B7;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
+      margin-top: 3px;
     }
 
     .glass-btn {
       background: var(--inner-bg);
       border: 1.2px solid var(--inner-border);
       color: var(--text-primary);
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 700;
-      padding: 8px 12px;
+      padding: 9px 14px;
       border-radius: 14px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       transition: transform 0.15s ease, background 0.2s ease;
     }
 
     .glass-btn:active {
-      transform: scale(0.95);
+      transform: scale(0.94);
       background: rgba(255, 255, 255, 0.2);
     }
 
@@ -240,13 +198,13 @@
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      box-shadow: 0 4px 14px -3px rgba(2, 132, 199, 0.2);
+      box-shadow: 0 4px 16px -2px rgba(2, 132, 199, 0.25);
     }
 
     .tonight-badge {
       font-size: 10px;
       font-weight: 800;
-      color: var(--banner-mat);
+      color: #38BDF8;
       background: var(--banner-badge-bg);
       padding: 2px 8px;
       border-radius: 999px;
@@ -258,7 +216,7 @@
     .tonight-text {
       font-size: 12.5px;
       font-weight: 600;
-      color: var(--banner-text);
+      color: #FFFFFF;
       line-height: 1.4;
     }
 
@@ -333,7 +291,7 @@
     /* 4. Hero Card */
     .hero-card {
       border: 2px solid var(--accent);
-      box-shadow: 0 8px 30px -8px var(--accent);
+      box-shadow: 0 8px 32px -8px var(--accent);
     }
 
     .hero-top-row {
@@ -357,7 +315,7 @@
     .hero-box-badge {
       font-size: 11px;
       font-weight: 700;
-      color: var(--text-secondary);
+      color: #CBD5E1;
       background: var(--inner-bg);
       padding: 4px 10px;
       border-radius: 999px;
@@ -373,16 +331,16 @@
     }
 
     .hero-orb {
-      width: 90px;
-      height: 90px;
-      border-radius: 45px;
-      background: radial-gradient(circle, var(--accent) 0%, rgba(255,255,255,0.08) 75%);
+      width: 92px;
+      height: 92px;
+      border-radius: 46px;
+      background: radial-gradient(circle, var(--accent) 0%, rgba(255,255,255,0.06) 75%);
       border: 2.5px solid var(--accent);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 44px;
-      box-shadow: 0 4px 22px -2px var(--accent);
+      font-size: 46px;
+      box-shadow: 0 4px 25px -2px var(--accent);
       position: relative;
       margin-bottom: 8px;
     }
@@ -391,7 +349,7 @@
       content: "";
       position: absolute;
       inset: 2px;
-      border-radius: 43px;
+      border-radius: 44px;
       border: 1px solid rgba(255, 255, 255, 0.4);
       pointer-events: none;
     }
@@ -401,15 +359,15 @@
       font-weight: 900;
       letter-spacing: -0.4px;
       margin-bottom: 4px;
-      color: var(--text-primary);
+      color: #FFFFFF;
     }
 
     .hero-timing {
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 700;
-      color: var(--text-secondary);
+      color: #CBD5E1;
       background: var(--inner-bg);
-      padding: 4px 12px;
+      padding: 4px 14px;
       border-radius: 999px;
       border: 1px solid var(--inner-border);
       margin-bottom: 14px;
@@ -433,19 +391,15 @@
     }
 
     .panel-label-green {
-      color: #059669;
+      color: #10B981;
       font-weight: 800;
       font-size: 11px;
       margin-bottom: 3px;
       letter-spacing: 0.3px;
     }
 
-    html.light-mode .panel-label-green {
-      color: #047857;
-    }
-
     .panel-label-red {
-      color: #E11D48;
+      color: #F43F5E;
       font-weight: 800;
       font-size: 11px;
       margin-bottom: 3px;
@@ -466,12 +420,12 @@
     }
 
     .panel-desc {
-      color: var(--desc-text);
+      color: #E2E8F0;
       font-weight: 500;
     }
 
     .panel-tip-desc {
-      color: var(--tip-text);
+      color: #FFFFFF;
       font-weight: 600;
     }
 
@@ -486,13 +440,13 @@
     .friday-title {
       font-size: 13px;
       font-weight: 800;
-      color: var(--text-primary);
+      color: #FFFFFF;
     }
 
     .friday-subtitle {
       font-size: 11px;
       font-weight: 700;
-      color: var(--banner-mat);
+      color: #38BDF8;
     }
 
     .friday-chips {
@@ -508,26 +462,16 @@
       padding: 8px 4px;
       text-align: center;
       font-size: 10.5px;
-      color: var(--text-primary);
+      color: #FFFFFF;
     }
 
     .friday-chip.active-vetro {
-      background: rgba(13, 148, 136, 0.2);
-      border-color: #0D9488;
-    }
-
-    html.light-mode .friday-chip.active-vetro {
-      background: #CCFBF1;
+      background: rgba(13, 148, 136, 0.25);
       border-color: #0D9488;
     }
 
     .friday-chip.active-carta {
-      background: rgba(2, 132, 199, 0.2);
-      border-color: #0284C7;
-    }
-
-    html.light-mode .friday-chip.active-carta {
-      background: #E0F2FE;
+      background: rgba(2, 132, 199, 0.25);
       border-color: #0284C7;
     }
 
@@ -539,7 +483,7 @@
     .friday-chip-mat {
       font-weight: 800;
       margin-top: 2px;
-      color: var(--text-primary);
+      color: #FFFFFF;
     }
 
     /* 6. Quick Action Buttons */
@@ -599,12 +543,9 @@
           </div>
         </div>
       </div>
-      <div class="header-actions">
-        <button class="glass-btn" onclick="toggleTheme()" id="themeBtn">
-          <span id="themeEmoji">☀️</span>
-        </button>
+      <div>
         <button class="glass-btn" onclick="testNotif()">
-          🔔
+          🔔 Notifica
         </button>
       </div>
     </div>
@@ -612,9 +553,9 @@
     <!-- 2. Tonight Exposition Banner -->
     <div class="tonight-banner" onclick="selectTomorrow()">
       <div>
-        <span class="tonight-badge">🌙 STASERA (21:00 - 24:00)</span>
+        <span class="tonight-badge">🌙 ESPOSIZIONE (ORE 21:00 - 23:00)</span>
         <div class="tonight-text" id="tonightDesc">
-          Caricamento...
+          Caricamento orario...
         </div>
       </div>
       <span style="font-size: 16px; color: var(--banner-mat); font-weight: 800;">›</span>
@@ -637,7 +578,7 @@
           <span id="heroEmoji">🌱</span>
         </div>
         <h2 class="hero-title" id="heroTitle">...</h2>
-        <div class="hero-timing">⏰ Ritiro al mattino · Esposizione 21:00 - 24:00</div>
+        <div class="hero-timing">🌙 Ritiro notturno · Esposizione ore 21:00 - 23:00</div>
       </div>
 
       <div class="info-panels">
@@ -717,7 +658,7 @@
         tip: "Attenzione regola Corato: il vetro si conferisce solo il 1° VENERDÌ DEL MESE, senza buste nel mastello."
       },
       "Secco residuo": {
-        accent: "#64748B",
+        accent: "#94A3B8",
         box: "🔘 Mastello Grigio (TAG)",
         cosaSi: "• Scontrini in carta termica, spazzolini, penne<br>• Pannolini, assorbenti, lettiere animali, polvere",
         cosaNo: "• Materiali riciclabili (umido, carta, plastica, vetro)<br>• Pile, farmaci scaduti, rifiuti speciali e RAEE",
@@ -728,7 +669,7 @@
         box: "🚫 Nessun mastello",
         cosaSi: "• Nessun conferimento previsto la domenica.<br>• Goditi la giornata di riposo!",
         cosaNo: "• Non abbandonare rifiuti o mastelli sul suolo pubblico.",
-        tip: "Domenica sera ricordati di esporre l'Umido per il ritiro di lunedì mattina!"
+        tip: "Domenica sera ricordati di esporre l'Umido per il ritiro di lunedì!"
       }
     };
 
@@ -739,7 +680,6 @@
     let timeOffsetMs = 0;
     let currentWeekDays = [];
     let currentDayIdx = 0;
-    let isDark = true;
     let lastRenderedDateKey = "";
 
     function getNow() {
@@ -852,7 +792,7 @@
       if (tomorrowInfo.mat === "Nessuna raccolta") {
         descEl.innerHTML = `Nessun mastello da esporre stasera (${tomorrowName} non c'è raccolta)`;
       } else {
-        descEl.innerHTML = `Domani (${tomorrowName}) ritirano: <span style="color: var(--banner-mat); font-weight:800;">${tomorrowInfo.emoji} ${tomorrowInfo.mat}</span> · Esporre mastello`;
+        descEl.innerHTML = `Stasera (ore 21:00 - 23:00) esponi per domani: <span style="color: var(--banner-mat); font-weight:800;">${tomorrowInfo.emoji} ${tomorrowInfo.mat}</span> · Ritiro notturno`;
       }
     }
 
@@ -869,7 +809,7 @@
         if (isSel) {
           pill.style.background = matData.accent;
           pill.style.borderColor = matData.accent;
-          pill.style.boxShadow = `0 4px 14px -2px ${matData.accent}`;
+          pill.style.boxShadow = `0 4px 16px -2px ${matData.accent}`;
         }
 
         pill.innerHTML = `
@@ -955,32 +895,18 @@
       selectDay(nextIdx);
     }
 
-    function toggleTheme() {
-      isDark = !isDark;
-      const htmlEl = document.documentElement;
-      const themeEmoji = document.getElementById("themeEmoji");
-      const metaTheme = document.getElementById("metaThemeColor");
-
-      if (!isDark) {
-        htmlEl.classList.add("light-mode");
-        themeEmoji.textContent = '🌙';
-        if (metaTheme) metaTheme.setAttribute("content", "#EEF4F1");
-      } else {
-        htmlEl.classList.remove("light-mode");
-        themeEmoji.textContent = '☀️';
-        if (metaTheme) metaTheme.setAttribute("content", "#0B0F17");
-      }
-      selectDay(currentDayIdx);
-    }
-
+    // Notifica modificata: segnala il conferimento del GIORNO CORRENTE con orario 21-23 e ritiro notturno
     function testNotif() {
       if (navigator.vibrate) navigator.vibrate([20, 50, 20]);
       const now = getNow();
-      const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-      const tomorrowInfo = getRaccoltaPerData(tomorrow);
-      const tomorrowName = NOMI_GIORNI[tomorrow.getDay()];
+      const todayInfo = getRaccoltaPerData(now);
+      const todayName = NOMI_GIORNI[now.getDay()];
 
-      alert(`🔔 Raccolta Corato:\nStasera tra le 21:00 e le 24:00 prepara ed esponi: ${tomorrowInfo.emoji} ${tomorrowInfo.mat} per la raccolta di domani ${tomorrowName}!`);
+      if (todayInfo.mat === "Nessuna raccolta") {
+        alert(`🔔 Raccolta Corato:\nOggi ${todayName}: Nessuna raccolta prevista.`);
+      } else {
+        alert(`🔔 Raccolta Corato:\nOggi ${todayName}: ${todayInfo.emoji} ${todayInfo.mat}!\n\n⏰ Esposizione: ore 21:00 - 23:00\n🌙 Ritiro: notturno`);
+      }
     }
 
     // Sincronizzazione precisa con ora online europea (Rome / Bari)
